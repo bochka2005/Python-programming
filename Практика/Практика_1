@@ -1,0 +1,179 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "toc_visible": true,
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/bochka2005/Python-programming/blob/main/%D0%9F%D1%80%D0%B0%D0%BA%D1%82%D0%B8%D0%BA%D0%B0/%D0%9F%D1%80%D0%B0%D0%BA%D1%82%D0%B8%D0%BA%D0%B0_1\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import random\n",
+        "\n",
+        "def monty_hall_simulation(num_simulations, change_choice):\n",
+        "    wins = 0\n",
+        "\n",
+        "    for _ in range(num_simulations):\n",
+        "        doors = [0, 0, 1]  # 0 - козел, 1 - автомобиль\n",
+        "        random.shuffle(doors)\n",
+        "\n",
+        "        player_choice = random.choice([0, 1, 2])\n",
+        "\n",
+        "        available_doors = []\n",
+        "        for door in [0, 1, 2]:\n",
+        "            if door != player_choice and doors[door] == 0:\n",
+        "                available_doors.append(door)\n",
+        "\n",
+        "        door_opened = random.choice(available_doors)\n",
+        "\n",
+        "        if change_choice:\n",
+        "            remaining_doors = [door for door in [0, 1, 2]\n",
+        "                             if door != player_choice and door != door_opened]\n",
+        "            final_choice = remaining_doors[0]\n",
+        "        else:\n",
+        "            final_choice = player_choice\n",
+        "\n",
+        "        if doors[final_choice] == 1:\n",
+        "            wins += 1\n",
+        "\n",
+        "    return (wins / num_simulations) * 100\n",
+        "\n",
+        "# Основная программа\n",
+        "print(\"ПАРАДОКС МОНТИ ХОЛЛА\")\n",
+        "print(\"=\" * 30)\n",
+        "\n",
+        "simulations = [5, 10, 15, 20, 25]\n",
+        "\n",
+        "print(\"\\nСмена выбора:\")\n",
+        "for count in simulations:\n",
+        "    result = monty_hall_simulation(count, True)\n",
+        "    print(f\"Попыток: {count} - Выигрышей: {result:.1f}%\")\n",
+        "\n",
+        "print(\"\\nБез смены выбора:\")\n",
+        "for count in simulations:\n",
+        "    result = monty_hall_simulation(count, False)\n",
+        "    print(f\"Попыток: {count} - Выигрышей: {result:.1f}%\")\n",
+        "\n",
+        "print(\"\\nВЫВОД: Смена выбора увеличивает шансы на выигрыш!\")"
+      ],
+      "metadata": {
+        "id": "LgBqhOEAaruX",
+        "outputId": "e76370e8-b239-4a67-f7c6-25fc8c6344b2",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 37,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "ПАРАДОКС МОНТИ ХОЛЛА\n",
+            "==============================\n",
+            "\n",
+            "Смена выбора:\n",
+            "Попыток: 5 - Выигрышей: 100.0%\n",
+            "Попыток: 10 - Выигрышей: 100.0%\n",
+            "Попыток: 15 - Выигрышей: 66.7%\n",
+            "Попыток: 20 - Выигрышей: 65.0%\n",
+            "Попыток: 25 - Выигрышей: 72.0%\n",
+            "\n",
+            "Без смены выбора:\n",
+            "Попыток: 5 - Выигрышей: 40.0%\n",
+            "Попыток: 10 - Выигрышей: 30.0%\n",
+            "Попыток: 15 - Выигрышей: 46.7%\n",
+            "Попыток: 20 - Выигрышей: 45.0%\n",
+            "Попыток: 25 - Выигрышей: 40.0%\n",
+            "\n",
+            "ВЫВОД: Смена выбора увеличивает шансы на выигрыш!\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import random\n",
+        "iterations = int(input(\"Введите количество игр: \"))\n",
+        "\n",
+        "def monty_hall(iterations):\n",
+        "    wins_change = 0\n",
+        "    wins_stay = 0\n",
+        "\n",
+        "    for _ in range(iterations):\n",
+        "        # Три двери: две пустые (0) и одна с призом (1)\n",
+        "        doors = [0, 0, 1]\n",
+        "        random.shuffle(doors)\n",
+        "\n",
+        "        # Игрок выбирает дверь (0, 1 или 2)\n",
+        "        player_choice = random.choice(doors)\n",
+        "\n",
+        "        # Ведущий открывает одну пустую дверь (не выбранную игроком)\n",
+        "        opened_door = 0\n",
+        "        for i in range(3):\n",
+        "            if i != player_choice and doors[i] == 0:\n",
+        "                opened_door = i\n",
+        "                break\n",
+        "\n",
+        "        # Игрок меняет выбор на оставшуюся дверь\n",
+        "        new_choice = 0\n",
+        "        for i in range(3):\n",
+        "            if i != player_choice and i != opened_door:\n",
+        "                new_choice = i\n",
+        "                break\n",
+        "\n",
+        "        # Проверяем результаты\n",
+        "        if doors[player_choice] == 1:\n",
+        "            wins_stay += 1\n",
+        "        if doors[new_choice] == 1:\n",
+        "            wins_change += 1\n",
+        "\n",
+        "    print(f\"Побед при смене выбора: {wins_change} ({wins_change/iterations*100:.1f}%)\")\n",
+        "    print(f\"Побед без смены выбора: {wins_stay} ({wins_stay/iterations*100:.1f}%)\")\n",
+        "\n",
+        "monty_hall(iterations)"
+      ],
+      "metadata": {
+        "id": "wAGNxgxVKC0z",
+        "outputId": "8e4afc86-b288-4c9e-8a3a-836204d397df",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 54,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Введите количество игр: 1000\n",
+            "Побед при смене выбора: 667 (66.7%)\n",
+            "Побед без смены выбора: 333 (33.3%)\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
